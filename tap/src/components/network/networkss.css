@@ -1,0 +1,128 @@
+/* Base container */
+.network-container {
+  margin: 40px auto;
+  padding: 30px;
+  max-width: 600px;
+  width: 90%;
+  background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+  border: 1px solid #90caf9;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Title styling */
+.network-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 20px;
+}
+
+/* Card layout */
+.network-card {
+  background-color: #ffffffdd;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.1);
+  font-size: 17px;
+  line-height: 1.8;
+  color: #263238;
+  text-align: left;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: default;
+}
+
+/* Hover effect for card */
+.network-card:hover {
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
+  transform: translateY(-5px);
+}
+
+/* Paragraph spacing */
+.network-card p {
+  margin: 10px 0;
+}
+
+/* Status text styling */
+.network-status {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+/* Hover effect for status */
+.network-status:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Status variants */
+.network-status.good {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #66bb6a;
+}
+
+.network-status.good:hover {
+  background-color: #c8e6c9;
+  color: #1b5e20;
+  border-color: #388e3c;
+}
+
+.network-status.poor {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ff9800;
+}
+
+.network-status.poor:hover {
+  background-color: #ffe0b2;
+  color: #e65100;
+  border-color: #f57c00;
+}
+
+.network-status.offline {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+}
+
+.network-status.offline:hover {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  border-color: #d32f2f;
+}
+
+/* Loading state */
+.network-container p {
+  font-size: 16px;
+  color: #546e7a;
+  font-style: italic;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .network-container {
+    padding: 20px;
+  }
+
+  .network-title {
+    font-size: 22px;
+  }
+
+  .network-card {
+    font-size: 15px;
+  }
+
+  .network-status {
+    font-size: 15px;
+    padding: 10px 14px;
+  }
+}
