@@ -126,3 +126,28 @@
     padding: 10px 14px;
   }
 }
+.network-container {
+  position: relative;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: white;
+  overflow: hidden;
+}
+
+.blackout::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:rgb(203, 202, 202);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.blackout.visible::after {
+  opacity: 0;
+}

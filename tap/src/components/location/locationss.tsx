@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Container, Typography, Paper } from "@mui/material";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./locationss.css";
+import { useIntersectionObserver } from "../observationin";
+
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 // Fix for default Leaflet icon not showing
-delete L.Icon.Default.prototype._getIconUrl;
+delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
 });
 
 function App() {
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const { ref: observerRef, isVisible } = useIntersectionObserver(0.8); // threshold = 80%
 
   const getLocation = () => {
     if ("geolocation" in navigator) {
@@ -38,13 +43,18 @@ function App() {
   }, []);
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 5 }}>
+    <Container
+      ref={observerRef}
+      className={`location-wrapper overlay ${isVisible ? "visible" : ""}`}
+      maxWidth="sm"
+      sx={{ mt: 5 }}
+    >
       <Paper elevation={3} sx={{ padding: 3, textAlign: "center" }}>
         <Typography variant="h4" gutterBottom>
           📍 Your Current Location
         </Typography>
         <Typography variant="body1" gutterBottom>
-        ---------------------------------------------------------
+          ---------------------------------------------------------
         </Typography>
 
         <Button

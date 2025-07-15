@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useIntersectionObserver } from "../observationin";// Adjust path as needed
 import "./canvasss.css";
 
 interface Position {
@@ -36,11 +37,12 @@ const ActivityCanvas: React.FC = () => {
   const [totalDistance, setTotalDistance] = useState(0);
   const [speed, setSpeed] = useState(0);
 
-  // Thresholds to reduce noise and unrealistic values
   const MIN_DISTANCE_THRESHOLD = 10; // meters
   const MAX_REALISTIC_SPEED = 15; // m/s (~54 km/h)
   const MIN_REALISTIC_SPEED = 0.3; // m/s (~1 km/h)
-  const AVG_STEP_LENGTH = 0.78; // meters average adult step length
+  const AVG_STEP_LENGTH = 0.78; // meters
+
+  const { ref: observerRef, isVisible } = useIntersectionObserver(0.8);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -63,10 +65,9 @@ const ActivityCanvas: React.FC = () => {
             newPos.longitude
           );
 
-          const timeDiff = (newPos.timestamp - prevPos.timestamp) / 1000; // seconds
-          const speedCalc = dist / timeDiff; // m/s
+          const timeDiff = (newPos.timestamp - prevPos.timestamp) / 1000;
+          const speedCalc = dist / timeDiff;
 
-          // Filter noise & unrealistic jumps
           if (
             dist >= MIN_DISTANCE_THRESHOLD &&
             speedCalc < MAX_REALISTIC_SPEED &&
@@ -77,7 +78,7 @@ const ActivityCanvas: React.FC = () => {
             return [...prev, newPos];
           }
 
-          return prev; // ignore noise or unrealistic data
+          return prev;
         });
       },
       (err) => console.error("Geolocation error:", err),
@@ -107,16 +108,15 @@ const ActivityCanvas: React.FC = () => {
     const minLon = Math.min(...lons);
     const maxLon = Math.max(...lons);
 
-    const latRange = maxLat - minLat || 0.0001; // avoid zero division
+    const latRange = maxLat - minLat || 0.0001;
     const lonRange = maxLon - minLon || 0.0001;
 
-    const padding = 20; // px padding on each side
+    const padding = 20;
     const scaleX = (canvas.width - 2 * padding) / lonRange;
     const scaleY = (canvas.height - 2 * padding) / latRange;
 
     const scale = Math.min(scaleX, scaleY);
 
-    // Draw path line if more than 1 point
     if (positions.length > 1) {
       ctx.strokeStyle = "#1976d2";
       ctx.lineWidth = 2;
@@ -133,7 +133,6 @@ const ActivityCanvas: React.FC = () => {
       ctx.stroke();
     }
 
-    // Draw red circle at starting position
     const start = positions[0];
     const startX = (start.longitude - minLon) * scale + padding;
     const startY = canvas.height - ((start.latitude - minLat) * scale + padding);
@@ -147,7 +146,10 @@ const ActivityCanvas: React.FC = () => {
   const steps = totalDistance / AVG_STEP_LENGTH;
 
   return (
-    <div className="activity-wrapper">
+    <div
+      ref={observerRef}
+      className={`activity-wrapper blackout ${isVisible ? "visible" : ""}`}
+    >
       <h2>🏃‍♂️ Live Activity Tracker</h2>
       <canvas ref={canvasRef} width={400} height={300} />
       <div className="activity-stats">

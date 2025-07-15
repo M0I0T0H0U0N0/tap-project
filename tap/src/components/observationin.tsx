@@ -1,20 +1,26 @@
-// hooks/useIntersection.ts
+// useIntersectionObserver.ts
 import { useEffect, useRef, useState } from "react";
 
-const useIntersection = (threshold = 0.5) => {
-  const ref = useRef<HTMLElement | null>(null);
-  const [isIntersecting, setIsIntersecting] = useState(false);
+export const useIntersectionObserver = (
+  threshold: number = 0.8
+) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setIsIntersecting(entry.isIntersecting),
+      ([entry]) => {
+        setIsVisible(entry.intersectionRatio >= threshold);
+      },
       { threshold }
     );
+
     if (ref.current) observer.observe(ref.current);
-    return () => { if (ref.current) observer.unobserve(ref.current); };
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
   }, [threshold]);
 
-  return { ref, isIntersecting };
+  return { ref, isVisible };
 };
-
-export default useIntersection;

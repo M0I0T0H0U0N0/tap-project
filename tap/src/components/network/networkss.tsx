@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useIntersectionObserver } from "../observationin";// Adjust path as needed
 import "./networkss.css";
 
 interface NetworkInfo {
@@ -10,6 +11,7 @@ interface NetworkInfo {
 
 const NetworkStatus: React.FC = () => {
   const [networkInfo, setNetworkInfo] = useState<NetworkInfo | null>(null);
+  const { ref: observerRef, isVisible } = useIntersectionObserver(0.8);
 
   useEffect(() => {
     const connection =
@@ -51,10 +53,8 @@ const NetworkStatus: React.FC = () => {
       setNetworkInfo(getStatus());
     };
 
-    // Set initial status
     setNetworkInfo(getStatus());
 
-    // Event listeners
     window.addEventListener("online", handleConnectionChange);
     window.addEventListener("offline", handleConnectionChange);
 
@@ -62,7 +62,6 @@ const NetworkStatus: React.FC = () => {
       connection.addEventListener("change", handleConnectionChange);
     }
 
-    // Cleanup listeners
     return () => {
       window.removeEventListener("online", handleConnectionChange);
       window.removeEventListener("offline", handleConnectionChange);
@@ -74,20 +73,26 @@ const NetworkStatus: React.FC = () => {
   }, []);
 
   return (
-    <div className="network-container">
+    <div
+      ref={observerRef}
+      className={`network-container blackout ${isVisible ? "visible" : ""}`}
+    >
       <h2 className="network-title">🌐 Network Status</h2>
       {networkInfo ? (
         <div className="network-card">
           <p><strong>Type:</strong> {networkInfo.effectiveType}</p>
           <p><strong>Speed:</strong> {networkInfo.downlink} Mbps</p>
           <p><strong>RTT:</strong> {networkInfo.rtt} ms</p>
-          <p className={`network-status ${
-            networkInfo.status.includes("Poor")
-              ? "poor"
-              : networkInfo.status.includes("offline") || networkInfo.status.includes("❌")
-              ? "offline"
-              : "good"
-          }`}>
+          <p
+            className={`network-status ${
+              networkInfo.status.includes("Poor")
+                ? "poor"
+                : networkInfo.status.includes("offline") ||
+                  networkInfo.status.includes("❌")
+                ? "offline"
+                : "good"
+            }`}
+          >
             {networkInfo.status}
           </p>
         </div>

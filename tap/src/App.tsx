@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Container } from "@mui/material";
 import Locationss from "./components/location/locationss";
 import NetworkStatus from "./components/network/networkss";
@@ -15,11 +15,6 @@ function App() {
       <NetworkStatus></NetworkStatus>
       <ActivityCanvas></ActivityCanvas>
  
-      
-     
-      
-        
-      
     </Container>
   );
 }

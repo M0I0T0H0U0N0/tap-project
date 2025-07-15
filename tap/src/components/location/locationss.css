@@ -108,3 +108,50 @@ body {
     padding: 12px 0;
   }
 }
+
+.location-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.blackout::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 1;
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.blackout.visible::after {
+  opacity: 0;
+}
+
+
+.location-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(203, 202, 202);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.overlay.visible::after {
+  opacity: 0;
+}
